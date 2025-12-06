@@ -1,0 +1,12 @@
+en:
+  dashboard:
+    revenue_trends: "Revenue Trends"
+    performance_over_time: "Performance over time"
+    vip_customers: "VIP Customers"
+    waiting_for_customers: "Waiting for customers..."
+    recent_orders: "Recent Orders"
+    stats:
+      total_revenue: "Total Revenue"
+      total_orders: "Total Orders"
+      total_customers: "Total Customers"
+      avg_order_value: "Avg. Order Value"

@@ -1,0 +1,33 @@
+<% if flash.any? %>
+  <div class="fixed top-4 right-4 z-[60] flex flex-col gap-3 w-full max-w-sm pointer-events-none">
+    <% flash.each do |type, message| %>
+      <div class="pointer-events-auto animate-fade-in">
+        <% if type == 'notice' || type == 'success' %>
+          <div class="flex items-center p-4 text-sm text-[#EEEFF1] border border-[#5E6AD2]/50 rounded-lg bg-[#5E6AD2]/10 shadow-sm" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 mr-3 text-[#5E6AD2]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Info</span>
+            <div><%= message %></div>
+          </div>
+        <% elsif type == 'alert' || type == 'error' %>
+          <div class="flex items-center p-4 text-sm text-[#D25E65] border border-[#D25E65]/50 rounded-lg bg-[#D25E65]/10 shadow-sm" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 mr-3 text-[#D25E65]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Alert</span>
+            <div><%= message %></div>
+          </div>
+        <% else %>
+          <div class="flex items-center p-4 text-sm text-[#EEEFF1] border border-[#2E3035] rounded-lg bg-[#151516] shadow-sm" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 mr-3 text-[#8A8F98]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Info</span>
+            <div><%= message %></div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

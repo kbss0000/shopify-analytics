@@ -1,0 +1,53 @@
+<!-- Orders Chart (Span 2) -->
+<div class="lg:col-span-2 bg-card/80 backdrop-blur-md border border-border/50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+  <div class="flex flex-wrap items-center justify-between mb-8 gap-4">
+    <div>
+      <h2 class="text-lg font-bold text-card-foreground tracking-tight"><%= t('dashboard.revenue_trends', default: 'Revenue Trends') %></h2>
+      <p class="text-xs text-muted-foreground uppercase tracking-wider font-semibold"><%= t('dashboard.performance_over_time', default: 'Performance over time') %></p>
+    </div>
+    <!-- Time Filters -->
+    <div class="flex bg-muted rounded-lg p-1 space-x-1 border border-border" data-controller="filter">
+      <button data-action="click->filter#activate" data-range="1W" class="px-4 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-md transition-colors" aria-label="Filter by 1 Week">1W</button>
+      <button data-action="click->filter#activate" data-range="1M" class="px-4 py-1.5 text-xs font-medium bg-background text-foreground rounded-md shadow-sm border border-border" aria-label="Filter by 1 Month">1M</button>
+      <button data-action="click->filter#activate" data-range="6M" class="px-4 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-md transition-colors" aria-label="Filter by 6 Months">6M</button>
+      <button data-action="click->filter#activate" data-range="1Y" class="px-4 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-md transition-colors" aria-label="Filter by 1 Year">1Y</button>
+    </div>
+  </div>
+  
+  <div class="relative z-10">
+    <% if @stats[:revenue_by_date].present? && @stats[:revenue_by_date].any? %>
+      <%= line_chart @stats[:revenue_by_date], 
+          height: "350px",
+          colors: ["#5E6AD2"],
+          library: { 
+            backgroundColor: 'transparent',
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#8A8F98', font: { family: 'Inter' } } },
+              y: { 
+                grid: { color: 'rgba(46, 48, 53, 0.3)', drawBorder: false }, 
+                ticks: { 
+                  color: '#8A8F98', 
+                  font: { family: 'Inter' },
+                  callback: "function(value) { return '$' + value.toFixed(2); }"
+                } 
+              }
+            },
+            elements: {
+              line: { tension: 0.4, borderWidth: 3, borderColor: '#5E6AD2', fill: true, backgroundColor: 'rgba(94, 106, 210, 0.1)' },
+              point: { radius: 0, hoverRadius: 8, hoverBackgroundColor: '#5E6AD2', hoverBorderColor: '#0F0F10', hoverBorderWidth: 2 }
+            }
+          } %>
+    <% else %>
+      <div class="flex items-center justify-center h-[350px] text-muted-foreground">
+        <div class="text-center">
+          <svg class="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          <p class="text-sm font-medium">No revenue data available</p>
+          <p class="text-xs mt-1">Connect your Shopify store to see revenue trends</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

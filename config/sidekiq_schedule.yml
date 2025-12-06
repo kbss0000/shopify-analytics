@@ -1,0 +1,6 @@
+# Sidekiq scheduled jobs
+sync_all_tenants:
+  cron: '0 */6 * * *'  # Every 6 hours
+  class: ShopifySyncAllTenantsJob
+  queue: default
+  description: "Sync Shopify data for all tenants"

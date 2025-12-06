@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: shopify-analytics
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: shopify-analytics-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: shopify-analytics-redis
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: true
+      - key: RAILS_LOG_TO_STDOUT
+        value: true
+
+  - type: worker
+    name: shopify-analytics-sidekiq
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec sidekiq"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: shopify-analytics-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: shopify-analytics-redis
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+
+databases:
+  - name: shopify-analytics-db
+    databaseName: shopify_analytics
+    user: shopify_analytics
+
+  - name: shopify-analytics-redis
+    plan: starter

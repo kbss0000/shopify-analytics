@@ -1,0 +1,55 @@
+<!-- Top Header -->
+<header class="sticky top-0 z-40 backdrop-blur-md bg-[#0F0F10]/95 border-b border-[#2E3035] transition-all duration-300 shadow-sm">
+  <div class="px-4 lg:px-8 py-4 flex items-center justify-between">
+    <!-- Left: Hamburger & Title -->
+    <div class="flex items-center space-x-4">
+      <!-- Mobile Menu Button -->
+      <button data-action="click->sidebar#open" class="lg:hidden p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <!-- Page Title -->
+      <div class="flex flex-col animate-fade-in">
+      <h1 class="text-xl font-bold text-foreground tracking-tight">
+        <%= content_for?(:page_title) ? yield(:page_title) : "Dashboard" %>
+      </h1>
+      <div class="flex items-center space-x-2 mt-1">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#5E6AD2] animate-pulse"></span>
+        <p class="text-muted-foreground text-xs font-medium">
+          <%= content_for?(:page_subtitle) ? yield(:page_subtitle) : "Live System Overview" %>
+        </p>
+      </div>
+    </div>
+    </div>
+    
+    <!-- Right Actions -->
+    <div class="flex items-center space-x-4">
+      <!-- Search -->
+      <div class="relative hidden lg:block group">
+        <div class="relative flex items-center bg-muted rounded-md border border-input">
+          <svg class="w-4 h-4 text-muted-foreground ml-3 absolute pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" placeholder="Search..." class="w-64 bg-transparent text-sm text-foreground placeholder-muted-foreground pl-10 pr-4 py-2 focus:outline-none focus:ring-1 focus:ring-ring rounded-md">
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="h-6 w-px bg-border/50 mx-2"></div>
+
+      <!-- Connection Status -->
+      <% if current_tenant.shopify_connected? %>
+        <div class="flex items-center space-x-2 px-3 py-1.5 bg-[#5E6AD2]/20 border border-[#5E6AD2]/40 rounded-full">
+          <svg class="w-3 h-3 text-[#5E6AD2]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span class="text-xs font-medium text-[#5E6AD2]"><%= current_tenant.shopify_domain %></span>
+        </div>
+      <% else %>
+        <%= link_to shopify_onboarding_path, class: "flex items-center space-x-2 px-3 py-1.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md transition-colors cursor-pointer" do %>
+          <span class="text-xs font-medium">Connect Store</span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</header>

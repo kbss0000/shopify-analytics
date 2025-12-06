@@ -1,0 +1,85 @@
+<% content_for :page_title, "Shopify Store Dashboard" %>
+<% content_for :page_subtitle, "Real-time analytics and performance metrics." %>
+
+<div class="max-w-7xl mx-auto space-y-8">
+  <!-- Hero Section with Background Image -->
+  <div class="relative rounded-2xl overflow-hidden shadow-2xl mb-8">
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('<%= asset_path("preview-1.png") %>');"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-background/70 via-background/60 to-background/80"></div>
+    <div class="relative z-10 p-12 lg:p-16">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight">
+          Welcome to Your Analytics Dashboard
+        </h1>
+        <p class="text-lg text-foreground/90 mb-6 leading-relaxed">
+          Track your store's performance with real-time insights, beautiful visualizations, and powerful analytics tools.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <% if current_tenant.shopify_connected? %>
+            <span class="inline-flex items-center px-4 py-2 bg-primary/20 text-primary border border-primary/30 rounded-lg text-sm font-medium">
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              Connected to <%= current_tenant.shopify_domain %>
+            </span>
+          <% else %>
+            <%= link_to shopify_onboarding_path, class: "inline-flex items-center px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl" do %>
+              Connect Your Store
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+    <%= render "shared/stat_card", 
+      label: t('dashboard.stats.total_revenue', default: 'Total Revenue'),
+      value: format_currency(@stats[:total_revenue]),
+      trend_up: true,
+      trend: "12.5%",
+      icon_bg: "bg-primary/10",
+      icon_color: "text-primary",
+      icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'.html_safe
+    %>
+
+    <%= render "shared/stat_card", 
+      label: t('dashboard.stats.total_orders', default: 'Total Orders'),
+      value: number_with_delimiter(@stats[:total_orders]),
+      trend_up: true,
+      trend: "8.2%",
+      icon_bg: "bg-primary/10",
+      icon_color: "text-primary",
+      icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>'.html_safe
+    %>
+
+    <%= render "shared/stat_card", 
+      label: t('dashboard.stats.total_customers', default: 'Total Customers'),
+      value: number_with_delimiter(@stats[:total_customers]),
+      trend_up: false,
+      trend: "2.4%",
+      icon_bg: "bg-primary/10",
+      icon_color: "text-primary",
+      icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>'.html_safe
+    %>
+
+    <%= render "shared/stat_card", 
+      label: t('dashboard.stats.avg_order_value', default: 'Avg. Order Value'),
+      value: format_currency(@stats[:average_order_value]),
+      trend_up: true,
+      trend: "5.1%",
+      icon_bg: "bg-primary/10",
+      icon_color: "text-primary",
+      icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>'.html_safe
+    %>
+  </div>
+
+  <!-- Charts & Lists Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-slide-up">
+    <%= render "revenue_chart" %>
+    <%= render "top_customers" %>
+  </div>
+
+  <!-- Recent Orders Table -->
+  <%= render "recent_orders" %>
+</div>

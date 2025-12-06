@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV.fetch("DATABASE_URL", nil) %>
+
+development:
+  <<: *default
+  database: shopify_analytics_development
+
+test:
+  <<: *default
+  database: shopify_analytics_test
+
+production:
+  <<: *default
+  database: shopify_analytics_production

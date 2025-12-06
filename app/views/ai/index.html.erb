@@ -1,0 +1,49 @@
+<% content_for :page_title, "AI Data Studio" %>
+<% content_for :page_subtitle, "Ask questions about your store data in plain English." %>
+
+<div class="max-w-5xl mx-auto space-y-8" data-controller="ai">
+  
+  <!-- Chat Interface -->
+  <div class="bg-card border border-border rounded-xl p-1 shadow-sm overflow-hidden">
+    <form data-action="submit->ai#submit" onsubmit="return false;" class="relative flex items-center">
+      <div class="absolute left-4 text-muted-foreground">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <input 
+        data-ai-target="prompt"
+        type="text" 
+        placeholder="Ask AI: 'Show me revenue trends for the last week' or 'Who are my top customers?'" 
+        class="w-full bg-transparent text-foreground placeholder-muted-foreground text-lg px-14 py-6 border-none focus:ring-0 focus:outline-none"
+        autocomplete="off"
+      >
+      <button type="submit" class="absolute right-3 bg-primary text-primary-foreground p-3 rounded-lg hover:opacity-90 transition-opacity">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <div class="space-y-6 hidden" data-ai-target="response" style="display: none;">
+    <!-- AI Answer -->
+    <div class="bg-card border border-border rounded-xl p-6 relative">
+      <div class="absolute -top-3 -left-3 w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-sm rotate-12">
+        <svg class="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+        </svg>
+      </div>
+      <h3 class="text-muted-foreground text-xs font-bold uppercase tracking-wider mb-2">AI Analysis</h3>
+      <p data-ai-target="answer" class="text-lg text-foreground leading-relaxed font-medium min-h-[3rem]"></p>
+    </div>
+
+    <!-- Data Result -->
+    <div class="bg-card border border-border rounded-xl p-6">
+      <h3 class="text-muted-foreground text-xs font-bold uppercase tracking-wider mb-4">Data Result</h3>
+      <div data-ai-target="visualization" class="bg-muted rounded-lg p-4 border border-border font-mono text-sm">
+        <!-- Data will appear here -->
+      </div>
+    </div>
+  </div>
+</div>

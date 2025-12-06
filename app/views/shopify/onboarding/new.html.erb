@@ -1,0 +1,64 @@
+<div class="max-w-2xl mx-auto space-y-8">
+  <div class="bg-card/80 backdrop-blur-md rounded-xl p-8 border border-border/50 shadow-lg">
+    <h1 class="text-3xl font-bold text-foreground mb-2">Connect Your Shopify Store</h1>
+    <p class="text-muted-foreground mb-8">Enter your Shopify store details to start syncing data.</p>
+
+    <div id="react-shopify-form" data-action="<%= shopify_onboarding_path %>"></div>
+
+    <%= form_with model: current_tenant, url: shopify_onboarding_path, class: "space-y-6 hidden" do |f| %>
+      <% if current_tenant.errors.any? %>
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">
+                <%= pluralize(current_tenant.errors.count, "error") %> prohibited this from being saved:
+              </h3>
+              <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                <% current_tenant.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :shopify_domain, "Shopify Domain", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :shopify_domain, 
+            placeholder: "your-store.myshopify.com",
+            class: "w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+        <p class="mt-1 text-sm text-gray-500">Enter your Shopify domain (e.g., mystore.myshopify.com)</p>
+      </div>
+
+      <div>
+        <%= f.label :shopify_access_token, "Access Token", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.password_field :shopify_access_token,
+            placeholder: "shpat_xxxxxxxxxxxxx",
+            class: "w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+        <p class="mt-1 text-sm text-gray-500">Your Shopify Admin API access token</p>
+      </div>
+
+      <div class="bg-primary/10 border border-primary/20 rounded-md p-4">
+        <h3 class="text-sm font-medium text-foreground mb-2">How to get your access token:</h3>
+        <ol class="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
+          <li>Go to your Shopify Admin panel</li>
+          <li>Navigate to Settings → Apps and sales channels → Develop apps</li>
+          <li>Create a new app or use an existing one</li>
+          <li>Configure Admin API scopes (read_customers, read_orders, read_products)</li>
+          <li>Install the app and copy the Admin API access token</li>
+        </ol>
+      </div>
+
+      <div class="flex justify-end space-x-4">
+        <%= link_to "Cancel", dashboard_path, class: "px-4 py-2 border border-border rounded-md text-foreground hover:bg-accent transition-colors" %>
+        <%= f.submit "Connect Store", class: "px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 cursor-pointer transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</div>

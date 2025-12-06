@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shopify Analytics | Modern Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-background text-foreground font-sans antialiased min-h-screen selection:bg-primary/30 selection:text-primary-foreground" data-controller="sidebar">
+    
+    <% if tenant_signed_in? %>
+      <!-- Mobile Overlay -->
+      <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+      <!-- Sidebar Navigation -->
+      <div data-sidebar-target="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out border-r border-border bg-card">
+        <%= render "shared/sidebar" %>
+      </div>
+      
+      <!-- Main Content Area with Background Image -->
+      <div class="lg:pl-72 min-h-screen flex flex-col transition-all duration-300 relative z-10">
+        <!-- Background Image -->
+        <div class="fixed inset-0 lg:left-72 pointer-events-none z-0">
+          <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30" style="background-image: url('<%= asset_path("preview-1.png") %>');"></div>
+          <div class="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95"></div>
+        </div>
+        
+        <!-- Top Header -->
+        <div class="relative z-20">
+          <%= render "shared/header" %>
+        </div>
+        
+        <!-- Page Content -->
+        <main id="main-content" class="relative z-10 flex-1 p-4 lg:p-8 animate-fade-in focus:outline-none" tabindex="-1">
+          <%= render "shared/flash" if flash.any? %>
+          <%= yield %>
+        </main>
+      </div>
+    <% else %>
+      <!-- Auth pages (login/signup) -->
+      <main class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-cover bg-center bg-no-repeat" style="background-image: url('<%= asset_path("preview-1.png") %>');">
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-background/90 via-background/80 to-background/90 backdrop-blur-sm"></div>
+        
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-md">
+          <%= render "shared/flash" if flash.any? %>
+          <%= yield %>
+        </div>
+      </main>
+    <% end %>
+  </body>
+</html>

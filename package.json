@@ -1,0 +1,25 @@
+{
+  "name": "shopify-analytics",
+  "version": "1.0.0",
+  "description": "Shopify Analytics Dashboard with Akane Theme",
+  "scripts": {
+    "build": "echo 'Using importmap for CDN dependencies'",
+    "dev": "echo 'Development mode - using importmap'"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "framer-motion": "^10.16.4",
+    "@monaco-editor/react": "^4.6.0",
+    "@liveblocks/client": "^1.3.0",
+    "@liveblocks/react": "^1.3.0",
+    "react-hook-form": "^7.48.2",
+    "zod": "^3.22.4",
+    "@hookform/resolvers": "^3.3.2",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1"
+  }
+}
+

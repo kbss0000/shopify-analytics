@@ -1,0 +1,53 @@
+<!-- Recent Orders Table -->
+<div class="bg-card/80 backdrop-blur-md border border-border/50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 animate-slide-up" style="animation-delay: 0.1s;">
+  <div class="px-8 py-6 border-b border-border flex justify-between items-center">
+    <h2 class="text-lg font-bold text-card-foreground tracking-tight"><%= t('dashboard.recent_orders', default: 'Recent Orders') %></h2>
+    <button class="text-sm text-primary hover:text-primary/80 font-medium flex items-center transition-colors" aria-label="View all recent orders">
+      View All
+      <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </button>
+  </div>
+  
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-left">
+      <thead class="bg-muted/50">
+        <tr>
+          <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Order ID</th>
+          <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Customer</th>
+          <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</th>
+          <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Amount</th>
+          <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider text-right">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border">
+        <% @recent_orders.each do |order| %>
+          <tr class="hover:bg-muted/50 transition-colors group">
+            <td class="px-8 py-4 whitespace-nowrap">
+              <span class="text-sm font-medium text-primary group-hover:underline underline-offset-4 decoration-primary/30">#<%= order.shopify_id %></span>
+            </td>
+            <td class="px-8 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-bold text-foreground mr-3">
+                    <%= order.customer&.first_name&.first || 'G' %>
+                </div>
+                <span class="text-sm text-foreground font-medium"><%= order.customer&.full_name || "Guest" %></span>
+              </div>
+            </td>
+            <td class="px-8 py-4 whitespace-nowrap">
+              <span class="text-sm text-muted-foreground"><%= format_datetime(order.placed_at) %></span>
+            </td>
+            <td class="px-8 py-4 whitespace-nowrap">
+              <span class="text-sm font-bold text-foreground font-mono"><%= format_currency(order.total_price) %></span>
+            </td>
+            <td class="px-8 py-4 whitespace-nowrap text-right">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-[#5E6AD2]/20 text-[#5E6AD2] border border-[#5E6AD2]/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#5E6AD2] mr-1.5 animate-pulse"></span>
+                <%= order.status&.capitalize || 'Pending' %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+INSTALLATION.md
+DEPLOYMENT.md
+SETUP_GUIDE.md
+
+/log/*
+/tmp/*
+/storage/*
+
+.env
+.env.*
+
+node_modules/

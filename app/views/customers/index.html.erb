@@ -1,0 +1,35 @@
+<% content_for :page_title, "Customers" %>
+<% content_for :page_subtitle, "View and manage your customer base." %>
+
+<div class="space-y-8">
+  <!-- Customers Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
+    <% current_tenant.customers.order(total_spent_cents: :desc).limit(12).each do |customer| %>
+      <div data-controller="tilt" class="bg-card/80 backdrop-blur-md rounded-xl p-6 border border-border/50 hover:border-primary/50 transition-all group relative overflow-hidden shadow-lg hover:shadow-xl">
+        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+          <svg class="w-24 h-24 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </div>
+        
+        <div class="relative z-10">
+          <div class="h-12 w-12 rounded-full bg-[#5E6AD2] flex items-center justify-center text-white font-bold text-lg mb-4">
+            <%= customer.first_name&.first %><%= customer.last_name&.first %>
+          </div>
+          
+          <h3 class="text-lg font-bold text-foreground"><%= customer.full_name %></h3>
+          <p class="text-sm text-muted-foreground mb-4"><%= customer.email %></p>
+          
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-border/50">
+            <div>
+              <p class="text-xs text-muted-foreground uppercase tracking-wider">Spent</p>
+              <p class="text-sm font-bold text-[#EEEFF1]"><%= format_currency(customer.total_spent) %></p>
+            </div>
+            <div>
+              <p class="text-xs text-muted-foreground uppercase tracking-wider">Orders</p>
+              <p class="text-sm font-bold text-foreground"><%= customer.orders.count %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
