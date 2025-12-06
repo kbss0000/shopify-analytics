@@ -1,71 +1,51 @@
-# Xeno FDE Internship Assignment Submission
+# Xeno FDE Internship Assignment - Submission
 
-## Project Overview
-**Shopify Data Ingestion & Insights Service**
+## 1. Assumptions & Trade-offs
+*   **Pagination**: The current Shopify ingestion logic fetches the first 250 items (customers, orders, products) per sync. For a production system, we would implement cursor-based pagination to handle thousands of records. This was a trade-off for simplicity and speed.
+*   **Authentication**: We use standard Devise email/password authentication. In a real multi-tenant SaaS, we might implement OAuth for Shopify App Store installation flow.
+*   **Security**: Shopify Access Tokens are currently stored in the database. In a production environment, these would be encrypted using `attr_encrypted` or Rails Credentials.
+*   **Background Jobs**: For this demo deployment, we are using the `Async` adapter (in-memory) for background jobs to keep the deployment **100% Free** (avoiding Redis costs). In production, we would use Sidekiq + Redis.
+*   **AI Features**: The AI Analyst is currently a simulation to demonstrate the UI/UX potential without incurring LLM API costs during the review.
 
-This project is a comprehensive solution for ingesting data from Shopify stores (Customers, Orders, Products) and visualizing business insights via a modern, secure, multi-tenant dashboard.
-
-## 🏗 Architecture
-
-### High-Level Diagram
+## 2. High-Level Architecture
 ```mermaid
 graph TD
-    User[User/Browser] -->|HTTPS| LoadBalancer
-    LoadBalancer -->|Request| AppServer[Rails App Server]
+    User[User/Browser] -->|HTTPS| RenderLB[Render Load Balancer]
+    RenderLB -->|Request| Rails[Rails Monolith (Web + API)]
     
-    subgraph "Data Layer"
-        AppServer -->|Read/Write| DB[(PostgreSQL)]
-        AppServer -->|Cache/Jobs| Redis[(Redis)]
+    subgraph "Render Free Tier"
+        Rails -->|Read/Write| PG[(PostgreSQL DB)]
+        Rails -->|Async Job| Memory[In-Memory Queue]
     end
     
-    subgraph "Background Workers"
-        Redis -->|Queue| Sidekiq[Sidekiq Workers]
-        Sidekiq -->|Sync API| ShopifyAPI[Shopify Admin API]
-        ShopifyAPI -->|Webhooks| AppServer
-    end
-    
-    subgraph "Frontend"
-        AppServer -->|HTML/Hotwire| Dashboard[Insights Dashboard]
+    subgraph "External APIs"
+        Memory -->|Sync| Shopify[Shopify Admin API]
     end
 ```
 
-### Key Components
-1.  **Ingestion Service (`Shopify::Ingestor`)**: A robust service object that handles API rate limits and pagination to sync Customers, Products, and Orders.
-2.  **Multi-Tenancy**: Implemented via the `Tenant` model. All data queries are scoped to `current_tenant` to ensure strict data isolation.
-3.  **Background Jobs**: `Sidekiq` handles long-running sync tasks and scheduled updates (every 6 hours) to prevent request timeouts.
-4.  **Dashboard**: A server-side rendered UI using **Hotwire (Turbo & Stimulus)** for a "Single Page App" feel without the complexity of a separate React frontend.
+## 3. Data Models
+*   **Tenant**: Represents a store owner. Holds `shopify_domain` and `access_token`.
+*   **Customer**: Synced from Shopify. Linked to Tenant.
+*   **Order**: Synced from Shopify. Linked to Tenant & Customer.
+*   **Product**: Synced from Shopify. Linked to Tenant.
+*   **CustomEvent**: (Bonus) Tracks specific user actions.
 
-## 🛠 Tech Stack Implementation
-*   **Framework**: Ruby on Rails 7 (MVC Architecture)
-*   **Database**: PostgreSQL (Relational Data)
-*   **Frontend**: Tailwind CSS + Hotwire (Stimulus/Turbo)
-*   **Background Processing**: Sidekiq + Redis
-*   **Deployment**: Dockerized (Render.com / Railway compatible)
+## 4. API Endpoints
+*   `POST /shopify/sync`: Triggers an immediate data sync.
+*   `GET /dashboard`: Main analytics view.
+*   `GET /api/ai/ask`: Endpoint for the AI Analyst chat.
 
-> **Note on Tech Stack:** While the assignment suggested Node.js/Java + React, this solution utilizes Ruby on Rails. This choice was made to leverage Rails' superior speed-to-market for MVP data applications, built-in security (CSRF, SQLi protection), and robust background job integration which is critical for data ingestion stability.
+## 5. Next Steps for Production
+1.  **Redis**: Switch from `Async` to `Sidekiq` backed by Redis for robust job processing.
+2.  **Pagination**: Implement full cursor-based pagination for Shopify API.
+3.  **Webhooks**: Verify HMAC signatures for incoming Shopify webhooks (security).
+4.  **Testing**: Add comprehensive RSpec tests for the Ingestor service.
 
-## ✅ Requirements Checklist
-
-| Requirement | Status | Implementation Details |
-| :--- | :--- | :--- |
-| **1. Shopify Store Setup** | ✅ Done | Development store connected. |
-| **2. Data Ingestion** | ✅ Done | `Shopify::Ingestor` syncs Customers, Orders, Products. |
-| **(Bonus) Custom Events** | ⚠️ Partial | Database schema exists (`CustomEvent`), but ingestion logic requires custom pixel setup. |
-| **Multi-Tenancy** | ✅ Done | Tenant-scoped database queries. |
-| **3. Insights Dashboard** | ✅ Done | Revenue charts, Top Customers, Recent Orders. |
-| **Date Filtering** | ✅ Done | Interactive 1W/1M/6M/1Y filters. |
-| **4. Documentation** | ✅ Done | This file + README.md. |
-| **Scheduler/Webhooks** | ✅ Done | Sidekiq Cron (6hrs) + Webhook Controllers. |
-| **Authentication** | ✅ Done | Devise (Email/Password). |
-
-## 🚀 Next Steps to Production
-1.  **OAuth Flow**: Replace the current "Personal Access Token" setup with a full Shopify OAuth App implementation for one-click installation.
-2.  **Real-Time Webhooks**: Fully wire up the `WebhooksController` to receive `orders/create` events instantly, reducing reliance on the scheduled sync.
-3.  **Advanced Analytics**: Implement "Cohort Analysis" to track customer retention over time.
-
-## 🧪 Testing & Assumptions
-*   **Assumption**: The Shopify API token provided has `read_orders`, `read_products`, and `read_customers` scopes.
-*   **Assumption**: Currency is standardized to USD for aggregation simplicity (though the model supports multiple).
-
----
-*Built with ❤️ for Xeno.*
+## 6. Deployment Instructions (Render)
+1.  Fork/Push this repo to your GitHub.
+2.  Log in to [Render.com](https://render.com).
+3.  Click **New +** -> **Blueprint**.
+4.  Select this repository.
+5.  Click **Apply**.
+    *   Render will automatically create the Database and Web Service.
+    *   It will use the `render.yaml` configuration included in this repo.
