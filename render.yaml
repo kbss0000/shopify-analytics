@@ -2,27 +2,25 @@ services:
   - type: web
     name: shopify-analytics
     env: ruby
-    buildCommand: bundle install && bundle exec rails assets:precompile
-    startCommand: bundle exec rails s -b 0.0.0.0 -p $PORT
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
-      - key: RAILS_ENV
-        value: production
-      - key: RAILS_MASTER_KEY
-        sync: false
-      - key: GROQ_API_KEY
-        sync: false
       - key: DATABASE_URL
         fromDatabase:
           name: shopify-analytics-db
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: shopify-analytics-redis
-          type: redis
-          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: true
+      - key: RAILS_LOG_TO_STDOUT
+        value: true
 
 databases:
   - name: shopify-analytics-db
+    databaseName: shopify_analytics
+    user: shopify_analytics
     plan: free
-    databaseName: shopify_analytics_production
-    user: shopify_analytics_user
