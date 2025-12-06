@@ -1,116 +1,59 @@
 # Shopify Analytics Dashboard
 
-A multi-tenant Rails SaaS application that allows Shopify store owners to connect their stores and view analytics.
+A modern, full-stack analytics platform for Shopify stores, featuring real-time sales visualization, AI-driven data insights, and a premium UI.
 
-## Features
+![Dashboard Screenshot](docs/screenshot.png)
 
-- **Multi-tenant Architecture**: Each Shopify store is a separate tenant
-- **Devise Authentication**: Secure login for store owners
-- **Shopify Integration**: Sync customers, orders, and products via Shopify Admin API
-- **Analytics Dashboard**: View key metrics including:
-  - Total customers, orders, and revenue
-  - Orders grouped by date with filters
-  - Top 5 customers by spend
-- **Background Sync**: Scheduled jobs to keep data fresh
-- **Webhook Support**: Real-time updates from Shopify
+## Overview
+
+This application provides Shopify merchants with a powerful, intuitive dashboard to track their store's performance. Built with Ruby on Rails 7 and a custom Shadcn-inspired design system, it offers a seamless user experience with instant data processing and actionable insights.
+
+## Key Features
+
+*   **Real-time Analytics**: Interactive charts and graphs for revenue, orders, and customer growth.
+*   **AI Insights**: Natural language query interface powered by LLMs to ask questions about your data (e.g., "Who are my top customers?").
+*   **Multi-Tenant Architecture**: Secure data isolation for multiple shops.
+*   **Background Processing**: Asynchronous job handling for reliable webhook processing and data syncing.
+*   **Modern UI/UX**: Responsive, dark-mode-first design with smooth animations and glassmorphism effects.
 
 ## Tech Stack
 
-- **Framework**: Ruby on Rails 7.0
-- **Database**: PostgreSQL
-- **Authentication**: Devise
-- **Background Jobs**: Sidekiq
-- **HTTP Client**: Faraday
-- **Charts**: Chartkick
-- **CSS**: Tailwind CSS
+*   **Backend**: Ruby on Rails 7.0, PostgreSQL, Sidekiq
+*   **Frontend**: Tailwind CSS, Stimulus.js, Chartkick
+*   **Infrastructure**: Docker, Render (Deployment)
+*   **AI Integration**: Groq API / Llama 3
 
-## Setup
+## Getting Started
 
 ### Prerequisites
 
-- Ruby 3.2.2
-- PostgreSQL
-- Redis (for Sidekiq)
+*   Ruby 3.2.2
+*   PostgreSQL
+*   Redis
 
 ### Installation
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd shopify-analytics
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/kbss0000/shopify-analytics.git
+    cd shopify-analytics
+    ```
 
-# Install dependencies
-bundle install
+2.  Install dependencies:
+    ```bash
+    bundle install
+    ```
 
-# Setup database
-rails db:create db:migrate db:seed
+3.  Setup database:
+    ```bash
+    rails db:setup
+    ```
 
-# Start Redis (required for Sidekiq)
-redis-server
-
-# Start Sidekiq
-bundle exec sidekiq
-
-# Start Rails server
-rails server
-```
-
-Visit `http://localhost:3000` to access the application.
-
-## Environment Variables
-
-Create a `.env` file in the root directory:
-
-```
-DATABASE_URL=postgresql://localhost/shopify_analytics_development
-REDIS_URL=redis://localhost:6379/0
-```
-
-## Deployment
-
-This application is configured for deployment on Render or Railway.
-
-### Render
-
-1. Connect your GitHub repository
-2. Set environment variables
-3. Deploy
-
-### Railway
-
-1. Connect your GitHub repository
-2. Add PostgreSQL and Redis services
-3. Set environment variables
-4. Deploy
-
-## Usage
-
-1. **Sign Up**: Create a tenant account
-2. **Connect Shopify**: Enter your Shopify domain and access token
-3. **Sync Data**: Trigger initial data sync
-4. **View Dashboard**: Access analytics and insights
-
-## Data Models
-
-- **Tenant**: Store owner account with Shopify credentials
-- **Customer**: Shopify customers belonging to a tenant
-- **Order**: Shopify orders with revenue data
-- **Product**: Shopify products catalog
-- **CustomEvent**: Optional custom event tracking
-
-## API Integration
-
-### Getting Shopify Access Token
-
-To connect your Shopify store, you'll need:
-1. Shop domain (e.g., `mystore.myshopify.com`)
-2. Access token (generated via Shopify Admin API)
-
-## Background Jobs
-
-- `ShopifySyncJob`: Scheduled job to sync all tenant data
-- Runs every 6 hours by default
+4.  Start the server:
+    ```bash
+    ./bin/dev
+    ```
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
