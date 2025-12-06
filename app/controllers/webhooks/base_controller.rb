@@ -1,6 +1,6 @@
 module Webhooks
   class BaseController < ActionController::API
-    skip_before_action :verify_authenticity_token
+
     before_action :verify_webhook
 
     private
