@@ -4,7 +4,13 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  config.secret_key = ENV.fetch("SECRET_KEY_BASE") { Rails.application.secret_key_base }
+  config.secret_key = ENV.fetch("SECRET_KEY_BASE") {
+    if ENV["SECRET_KEY_BASE_DUMMY"]
+      "dummy_secret_key_base_for_asset_precompilation_only"
+    else
+      Rails.application.secret_key_base
+    end
+  }
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
