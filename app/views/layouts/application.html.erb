@@ -18,21 +18,29 @@
     <meta property="twitter:title" content="XenoInsights | Analytics Dashboard">
     <meta property="twitter:description" content="Modern, AI-powered analytics dashboard for Shopify stores. Track revenue, orders, and customer insights in real-time.">
     <meta property="twitter:image" content="<%= image_url('og-jade-preview.jpg') %>">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Critical: Load Chart.js globally for Chartkick -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body class="bg-background text-foreground font-sans antialiased min-h-screen" data-controller="sidebar">
     
     <% if tenant_signed_in? %>
-      <!-- Background Image - Same as login page style -->
+      <!-- Background Image -->
       <div class="fixed inset-0 z-0">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('<%= asset_path("osaka-jade-bg.jpg") %>');"></div>
         <div class="absolute inset-0 bg-background/80"></div>

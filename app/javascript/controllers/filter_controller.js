@@ -1,16 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static classes = [ "active", "inactive" ]
-  
+  static classes = ["active", "inactive"]
+
   connect() {
-    this.activeClass = ["bg-midnight-700", "text-white", "shadow-sm", "border", "border-white/5"]
-    this.inactiveClass = ["text-slate-400", "hover:text-white", "border-transparent"]
-    
+    this.activeClass = ["bg-primary/20", "text-primary"]
+    this.inactiveClass = ["text-muted-foreground", "hover:text-foreground"]
+
     // Set initial active state based on URL params
     const urlParams = new URLSearchParams(window.location.search)
     const startDate = urlParams.get('start_date')
-    
+
     if (!startDate) {
       // Default to 1M if no param (matches controller default)
       this.setActiveButton('1M')
@@ -27,8 +27,8 @@ export default class extends Controller {
     const range = event.currentTarget.dataset.range
     const today = new Date()
     let startDate = new Date()
-    
-    switch(range) {
+
+    switch (range) {
       case '1W':
         startDate.setDate(today.getDate() - 7)
         break
@@ -42,11 +42,11 @@ export default class extends Controller {
         startDate.setDate(today.getDate() - 365)
         break
     }
-    
+
     const params = new URLSearchParams(window.location.search)
     params.set('start_date', startDate.toISOString().split('T')[0])
     params.set('end_date', today.toISOString().split('T')[0])
-    
+
     // Turbo visit if available for smoother experience, else full reload
     if (window.Turbo) {
       window.Turbo.visit(`${window.location.pathname}?${params.toString()}`)
