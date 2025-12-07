@@ -10,9 +10,7 @@ A full-stack analytics platform for Shopify stores with AI-powered insights, rev
 
 ## 🎬 Live Demo Video
 
-https://github.com/user-attachments/assets/shopify_ruby.mp4
-
-https://github.com/kbss0000/shopify-analytics/raw/main/shopify_ruby.mp4
+<video src="https://github.com/kbss0000/shopify-analytics/raw/main/shopify_ruby.mp4" controls width="100%"></video>
 
 ---
 
