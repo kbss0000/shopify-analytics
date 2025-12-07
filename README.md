@@ -10,7 +10,11 @@ A full-stack analytics platform for Shopify stores with AI-powered insights, rev
 
 ## 🎬 Live Demo Video
 
-[![Watch Demo](https://img.shields.io/badge/▶-Watch_Demo_Video-22c55e?style=for-the-badge&logo=youtube)](https://github.com/kbss0000/shopify-analytics/raw/main/shopify_ruby.mp4)
+[![Watch Demo](https://img.shields.io/badg
+
+https://github.com/user-attachments/assets/6aeca734-ec4b-4ffa-b068-1a18d26b1351
+
+e/▶-Watch_Demo_Video-22c55e?style=for-the-badge&logo=youtube)](https://github.com/kbss0000/shopify-analytics/raw/main/shopify_ruby.mp4)
 
 ---
 
@@ -358,3 +362,4 @@ Kasilanka Bhoopesh Siva Srikar
 A full-stack Shopify analytics dashboard with AI-powered natural language querying. Features a premium dark UI with the Osaka Jade design system, real-time charts, and comprehensive store analytics.
 
 https://shopify-analytics-le8r.onrender.com
+
