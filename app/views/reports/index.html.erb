@@ -1,51 +1,58 @@
 <% content_for :page_title, "Analytics Reports" %>
-<% content_for :page_subtitle, "Deep dive into your store performance." %>
+<% content_for :page_subtitle, "Deep dive into your store performance" %>
 
-<div class="space-y-8 animate-fade-in">
+<div class="space-y-8">
   
   <!-- Report Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <!-- Sales Over Time -->
-    <div class="bg-card/80 backdrop-blur-md border border-border/50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+    <div class="card p-6">
       <div class="flex items-center justify-between mb-6">
-        <h3 class="text-lg font-bold text-card-foreground">Sales Performance</h3>
+        <h3 class="section-title">Sales Performance</h3>
         <%= link_to reports_path(format: :csv), class: "btn-secondary text-xs flex items-center gap-2" do %>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           Export CSV
         <% end %>
       </div>
       <%= line_chart current_tenant.orders.group_by_day(:placed_at).sum(:total_price_cents).transform_values { |v| v/100.0 }, 
-          colors: ["#5E6AD2"], 
+          colors: ["#22c55e"], 
           height: "300px",
           library: {
+            backgroundColor: 'transparent',
             scales: { 
-              x: { grid: { display: false }, ticks: { color: '#8A8F98' } }, 
-              y: { grid: { color: 'rgba(46, 48, 53, 0.3)' }, ticks: { color: '#8A8F98' } } 
+              x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.4)' }, border: { display: false } }, 
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.4)' }, border: { display: false } } 
             },
-            elements: { line: { tension: 0.4, fill: true, backgroundColor: 'rgba(94, 106, 210, 0.1)' } }
+            elements: { 
+              line: { tension: 0.4, borderWidth: 2, fill: true, backgroundColor: 'rgba(34, 197, 94, 0.1)' },
+              point: { radius: 0, hoverRadius: 6 }
+            },
+            plugins: { legend: { display: false } }
           }
       %>
     </div>
 
     <!-- Orders Count -->
-    <div class="bg-card/80 backdrop-blur-md border border-border/50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
-      <h3 class="text-lg font-bold text-card-foreground mb-6">Order Volume</h3>
+    <div class="card p-6">
+      <h3 class="section-title mb-6">Order Volume</h3>
       <%= column_chart current_tenant.orders.group_by_day(:placed_at).count,
-          colors: ["#5E6AD2"],
+          colors: ["#22c55e"],
           height: "300px",
           library: {
+            backgroundColor: 'transparent',
             scales: { 
-              x: { grid: { display: false }, ticks: { color: '#8A8F98' } }, 
-              y: { grid: { color: 'rgba(46, 48, 53, 0.3)' }, ticks: { color: '#8A8F98' } } 
+              x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.4)' }, border: { display: false } }, 
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.4)' }, border: { display: false } } 
             },
-            borderRadius: 4
+            borderRadius: 6,
+            plugins: { legend: { display: false } }
           }
       %>
     </div>
   </div>
 
-  <div class="bg-card/80 backdrop-blur-md rounded-xl p-8 text-center border border-dashed border-border/50 shadow-lg">
+  <div class="card p-8 text-center border-dashed">
     <p class="text-muted-foreground">More advanced reports coming soon via the AI Studio.</p>
-    <%= link_to "Ask AI for Custom Reports", ai_path, class: "inline-block mt-4 text-primary hover:text-primary/80 hover:underline transition-colors" %>
+    <%= link_to "Ask AI for Custom Reports", ai_path, class: "inline-block mt-4 text-primary hover:text-primary/80 font-semibold transition-colors" %>
   </div>
 </div>

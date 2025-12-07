@@ -15,129 +15,130 @@ module.exports = {
         mono: ['JetBrains Mono', ...defaultTheme.fontFamily.mono],
       },
       colors: {
-        border: "hsl(var(--border) / <alpha-value>)",
-        input: "hsl(var(--input) / <alpha-value>)",
-        ring: "hsl(var(--ring) / <alpha-value>)",
-        background: "hsl(var(--background) / <alpha-value>)",
-        foreground: "hsl(var(--foreground) / <alpha-value>)",
+        // Osaka Jade Theme - Inspired by the jade green aesthetic
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+
         primary: {
-          DEFAULT: "hsl(var(--primary) / <alpha-value>)",
-          foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
-          foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
-          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
-          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent) / <alpha-value>)",
-          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
-          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
-        // Linear Midnight Theme (Premium, Technical, Invisible)
-        // Background: Almost Black - adds depth
-        background: '#0F0F10', // Deepest Grey/Black
-        // Text: Soft White - High contrast but not harsh
-        foreground: '#EEEFF1', // Soft White
-
         card: {
-          DEFAULT: '#151516', // Slightly lighter than bg - Subtle separation
-          foreground: '#EEEFF1', // Soft White text
-        },
-        popover: {
-          DEFAULT: '#151516', // Same as card
-          foreground: '#EEEFF1', // Soft White
-        },
-        // Primary: Blurple - Professional & Calm
-        primary: {
-          DEFAULT: '#5E6AD2', // "Blurple" - Professional & Calm
-          foreground: '#FFFFFF', // Pure white for contrast
-        },
-        // Secondary: Nordic Grey - for secondary buttons
-        secondary: {
-          DEFAULT: '#222326', // Nordic Grey
-          foreground: '#A0A0A0', // Muted grey text
-        },
-        // Muted: Cool Grey backgrounds
-        muted: {
-          DEFAULT: '#1A1B1E', // Dark grey for subtle backgrounds
-          foreground: '#8A8F98', // Cool Grey text
-        },
-        // Accent: Hover states
-        accent: {
-          DEFAULT: '#282A2F', // Hover states
-          foreground: '#EEEFF1', // Soft White
-        },
-        // Destructive: Soft Red for alerts
-        destructive: {
-          DEFAULT: '#D25E65', // Soft Red
-          foreground: '#FFFFFF', // Pure white
-        },
-        // Borders: Subtle, high-quality borders
-        border: '#2E3035', // Subtle, high-quality borders
-        input: '#222326', // Input borders
-        // Ring: Focus ring matches primary
-        ring: '#5E6AD2', // Focus ring matches primary
-
-        // Linear Midnight Theme Specific Colors
-        theme: {
-          'midnight-bg': '#0F0F10',      // Background - Almost Black
-          'midnight-card': '#151516',     // Surface/Cards - Subtle separation
-          'midnight-border': '#2E3035',   // Borders - Subtle, high-quality
-          'blurple': '#5E6AD2',           // Primary - Blurple
-          'soft-red': '#D25E65',         // Destructive - Soft Red
-          'soft-white': '#EEEFF1',        // Text - Soft White
-          'cool-grey': '#8A8F98',         // Muted text - Cool Grey
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
 
-        // Legacy Mappings (to prevent crashes, mapped to semantics)
-        midnight: {
-          950: '#0b1628',
-          900: '#0E1E36',
-          800: '#1a2c47',
-          700: '#2d3f5c',
-          600: '#574F72',
+        // Semantic colors
+        success: {
+          DEFAULT: '#22c55e',
+          foreground: '#ffffff',
         },
-        snow: {
-          storm: '#F4B999',
-          storm2: '#e2d5cc',
-          storm3: '#9279AA',
-        }
+        warning: {
+          DEFAULT: '#f59e0b',
+          foreground: '#ffffff',
+        },
+
+        // Jade theme colors for direct use
+        jade: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16',
+        },
+
+        // Warm accent colors
+        amber: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+        },
       },
+
       boxShadow: {
-        'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
-        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05)',
+        'glow': '0 0 20px -5px rgba(34, 197, 94, 0.4)',
+        'glow-lg': '0 0 40px -10px rgba(34, 197, 94, 0.5)',
+        'card': '0 4px 24px -4px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+        'card-hover': '0 8px 32px -4px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(34, 197, 94, 0.2)',
       },
+
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-jade': 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, transparent 50%)',
       },
+
       animation: {
-        'fade-in': 'fadeIn 0.3s ease-out',
-        'slide-up': 'slideUp 0.3s ease-out',
+        'fade-in': 'fadeIn 0.5s ease-out',
+        'slide-up': 'slideUp 0.5s ease-out',
+        'slide-down': 'slideDown 0.4s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
       },
+
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
-      }
+        slideDown: {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.9)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+      },
+
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+      },
     },
   },
   plugins: []

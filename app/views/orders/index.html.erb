@@ -1,64 +1,78 @@
 <% content_for :page_title, "Order History" %>
-<% content_for :page_subtitle, "Manage and track all customer orders." %>
+<% content_for :page_subtitle, "Manage and track all customer orders" %>
 
 <div class="space-y-8">
   <!-- Header Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
-    <div class="bg-card/80 backdrop-blur-md rounded-xl p-6 border border-border/50 shadow-lg">
-      <h3 class="text-muted-foreground text-sm font-medium">Total Orders</h3>
-      <p class="text-2xl font-bold text-foreground mt-2"><%= current_tenant.orders.count %></p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="card p-6">
+      <h3 class="stat-label">Total Orders</h3>
+      <p class="stat-value mt-2"><%= current_tenant.orders.count %></p>
     </div>
-    <div class="bg-card/80 backdrop-blur-md rounded-xl p-6 border border-border/50 shadow-lg">
-      <h3 class="text-muted-foreground text-sm font-medium">Pending Fulfillment</h3>
-      <p class="text-2xl font-bold text-foreground mt-2"><%= current_tenant.orders.pending.count %></p>
+    <div class="card p-6">
+      <h3 class="stat-label">Pending Fulfillment</h3>
+      <p class="stat-value mt-2"><%= current_tenant.orders.pending.count %></p>
     </div>
-    <div class="bg-card/80 backdrop-blur-md rounded-xl p-6 border border-border/50 shadow-lg">
-      <h3 class="text-muted-foreground text-sm font-medium">Returns</h3>
-      <p class="text-2xl font-bold text-foreground mt-2">0</p>
+    <div class="card p-6">
+      <h3 class="stat-label">Returns</h3>
+      <p class="stat-value mt-2">0</p>
     </div>
   </div>
 
   <!-- Orders Table -->
-  <div class="bg-card/80 backdrop-blur-md border border-border/50 rounded-2xl overflow-hidden animate-slide-up shadow-lg">
-    <div class="px-8 py-6 border-b border-border/50">
-      <h2 class="text-lg font-bold text-foreground tracking-tight">All Orders</h2>
+  <div class="card overflow-hidden">
+    <div class="px-6 py-5 border-b border-border">
+      <h2 class="section-title">All Orders</h2>
     </div>
     
     <div class="overflow-x-auto">
       <table class="min-w-full text-left">
-        <thead class="bg-muted/50">
+        <thead class="bg-secondary/50">
           <tr>
-            <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Order ID</th>
-            <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</th>
-            <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Customer</th>
-            <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Total</th>
-            <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">Payment</th>
-            <th class="px-8 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider text-right">Fulfillment</th>
+            <th class="px-6 py-4 table-header">Order ID</th>
+            <th class="px-6 py-4 table-header">Date</th>
+            <th class="px-6 py-4 table-header">Customer</th>
+            <th class="px-6 py-4 table-header">Total</th>
+            <th class="px-6 py-4 table-header">Payment</th>
+            <th class="px-6 py-4 table-header text-right">Fulfillment</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-border/50">
+        <tbody class="divide-y divide-border">
           <% current_tenant.orders.order(placed_at: :desc).limit(50).each do |order| %>
-            <tr class="hover:bg-muted/30 transition-colors group">
-              <td class="px-8 py-4 whitespace-nowrap font-mono text-sm text-primary">#<%= order.shopify_id %></td>
-              <td class="px-8 py-4 whitespace-nowrap text-sm text-muted-foreground"><%= order.placed_at.strftime("%b %d, %Y") %></td>
-              <td class="px-8 py-4 whitespace-nowrap text-sm text-foreground"><%= order.customer&.full_name || "Guest" %></td>
-              <td class="px-8 py-4 whitespace-nowrap text-sm font-bold text-foreground"><%= format_currency(order.total_price) %></td>
-              <td class="px-8 py-4 whitespace-nowrap">
-                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#5E6AD2]/20 text-[#5E6AD2] border border-[#5E6AD2]/40">Paid</span>
+            <tr class="hover:bg-secondary/30 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap font-mono text-sm text-primary font-semibold">#<%= order.shopify_id %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground"><%= order.placed_at.strftime("%b %d, %Y") %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground"><%= order.customer&.full_name || "Guest" %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-foreground"><%= format_currency(order.total_price) %></td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="badge-primary">Paid</span>
               </td>
-              <td class="px-8 py-4 whitespace-nowrap text-right">
-                <% status_color = case order.status&.downcase
-                     when 'fulfilled' then 'bg-[#5E6AD2]/20 text-[#5E6AD2] border-[#5E6AD2]/40'
-                     when 'pending' then 'bg-[#8A8F98]/20 text-[#8A8F98] border-[#8A8F98]/40'
-                     when 'cancelled' then 'bg-[#D25E65]/20 text-[#D25E65] border-[#D25E65]/40'
-                     else 'bg-[#8A8F98]/20 text-[#8A8F98] border-[#8A8F98]/40'
+              <td class="px-6 py-4 whitespace-nowrap text-right">
+                <% status_class = case order.status&.downcase
+                     when 'fulfilled' then 'badge-primary'
+                     when 'pending' then 'badge'
+                     when 'cancelled' then 'bg-destructive/15 text-destructive border-destructive/30'
+                     else 'badge'
                    end %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium <%= status_color %> border"> <%= order.status&.capitalize || 'Pending' %></span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full border <%= status_class %>">
+                  <%= order.status&.capitalize || 'Pending' %>
+                </span>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
+    
+    <% if current_tenant.orders.empty? %>
+      <div class="p-12 text-center">
+        <div class="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center mx-auto mb-4 border border-border">
+          <svg class="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+        </div>
+        <p class="text-base font-semibold text-foreground mb-1">No orders yet</p>
+        <p class="text-sm text-muted-foreground">Connect your Shopify store to see orders</p>
+      </div>
+    <% end %>
   </div>
 </div>

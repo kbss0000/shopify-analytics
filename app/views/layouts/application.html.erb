@@ -1,57 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Shopify Analytics | Modern Dashboard</title>
+    <title>XenoInsights | Analytics Dashboard</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Modern analytics dashboard for Shopify stores">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-background text-foreground font-sans antialiased min-h-screen selection:bg-primary/30 selection:text-primary-foreground" data-controller="sidebar">
+  <body class="bg-background text-foreground font-sans antialiased min-h-screen" data-controller="sidebar">
     
     <% if tenant_signed_in? %>
+      <!-- Background Image - Same as login page style -->
+      <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('<%= asset_path("osaka-jade-bg.jpg") %>');"></div>
+        <div class="absolute inset-0 bg-background/80"></div>
+        <!-- Gradient accents -->
+        <div class="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-radial from-primary/10 to-transparent"></div>
+        <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-radial from-accent/5 to-transparent"></div>
+      </div>
+      
       <!-- Mobile Overlay -->
       <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
 
-      <!-- Sidebar Navigation -->
-      <div data-sidebar-target="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out border-r border-border bg-card">
+      <!-- Sidebar -->
+      <div data-sidebar-target="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out">
         <%= render "shared/sidebar" %>
       </div>
       
-      <!-- Main Content Area with Background Image -->
-      <div class="lg:pl-72 min-h-screen flex flex-col transition-all duration-300 relative z-10">
-        <!-- Background Image -->
-        <div class="fixed inset-0 lg:left-72 pointer-events-none z-0">
-          <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30" style="background-image: url('<%= asset_path("preview-1.png") %>');"></div>
-          <div class="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95"></div>
-        </div>
-        
-        <!-- Top Header -->
-        <div class="relative z-20">
-          <%= render "shared/header" %>
-        </div>
+      <!-- Main Content -->
+      <div class="lg:pl-72 min-h-screen flex flex-col relative z-10">
+        <!-- Header -->
+        <%= render "shared/header" %>
         
         <!-- Page Content -->
-        <main id="main-content" class="relative z-10 flex-1 p-4 lg:p-8 animate-fade-in focus:outline-none" tabindex="-1">
+        <main id="main-content" class="flex-1 p-6 lg:p-8">
           <%= render "shared/flash" if flash.any? %>
-          <%= yield %>
+          <div class="animate-fade-in">
+            <%= yield %>
+          </div>
         </main>
+        
+        <!-- Footer -->
+        <footer class="px-6 lg:px-8 py-4 border-t border-border">
+          <p class="text-xs text-muted-foreground text-center">
+            XenoInsights Analytics &copy; <%= Date.current.year %>
+          </p>
+        </footer>
       </div>
     <% else %>
-      <!-- Auth pages (login/signup) -->
-      <main class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-cover bg-center bg-no-repeat" style="background-image: url('<%= asset_path("preview-1.png") %>');">
-        <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-background/90 via-background/80 to-background/90 backdrop-blur-sm"></div>
+      <!-- Auth Pages -->
+      <main class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('<%= asset_path("osaka-jade-bg.jpg") %>');"></div>
+        
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-background/85 backdrop-blur-sm"></div>
+        
+        <!-- Gradient accents -->
+        <div class="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-radial from-primary/10 to-transparent"></div>
+        <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-radial from-accent/5 to-transparent"></div>
         
         <!-- Content -->
-        <div class="relative z-10 w-full max-w-md">
+        <div class="relative z-10 w-full max-w-md animate-scale-in">
           <%= render "shared/flash" if flash.any? %>
           <%= yield %>
         </div>

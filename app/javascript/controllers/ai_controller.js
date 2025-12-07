@@ -1,25 +1,28 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [ "prompt", "response", "answer", "visualization" ]
+  static targets = ["prompt", "response", "answer", "visualization"]
 
   connect() {
     console.log("✅ AI Controller connected")
-    console.log("Targets:", {
-      prompt: !!this.promptTarget,
-      response: !!this.responseTarget,
-      answer: !!this.answerTarget,
-      visualization: !!this.visualizationTarget
-    })
+  }
+
+  // Handle suggestion button clicks - populate input and focus
+  suggest(event) {
+    const text = event.currentTarget.textContent.trim()
+    if (this.promptTarget && text) {
+      this.promptTarget.value = text
+      this.promptTarget.focus()
+    }
   }
 
   async submit(event) {
     event.preventDefault()
     event.stopPropagation()
     event.stopImmediatePropagation()
-    
+
     console.log("🚀 Form submitted!")
-    
+
     const promptText = this.promptTarget?.value?.trim()
     if (!promptText) {
       console.warn("⚠️ No prompt text")
@@ -60,7 +63,7 @@ export default class extends Controller {
       }
 
       console.log("🌐 Making API request...")
-      
+
       const response = await fetch('/ai/ask', {
         method: 'POST',
         headers: {
@@ -82,7 +85,7 @@ export default class extends Controller {
 
       const data = await response.json()
       console.log("✅ Data received:", data)
-      
+
       if (!data) {
         throw new Error('No data received from server')
       }
@@ -102,7 +105,7 @@ export default class extends Controller {
           // If data is an array, format as a table
           if (Array.isArray(data.data)) {
             let tableHTML = '<div class="overflow-auto max-h-96"><table class="min-w-full text-xs"><thead class="bg-muted"><tr>'
-            
+
             // Get headers from first object
             if (data.data.length > 0) {
               const headers = Object.keys(data.data[0])
@@ -110,7 +113,7 @@ export default class extends Controller {
                 tableHTML += `<th class="px-3 py-2 text-left font-semibold text-foreground border-b border-border">${header.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>`
               })
               tableHTML += '</tr></thead><tbody>'
-              
+
               data.data.forEach((row, idx) => {
                 const bgClass = idx % 2 === 0 ? 'bg-card' : 'bg-muted/50'
                 tableHTML += `<tr class="${bgClass}">`
@@ -152,14 +155,14 @@ export default class extends Controller {
     } catch (error) {
       console.error("❌ AI Error:", error)
       console.error("Stack:", error.stack)
-      
+
       const errorMsg = error.message || 'Unknown error occurred'
-      
+
       if (this.answerTarget) {
         this.answerTarget.textContent = `Error: ${errorMsg}. Please try again.`
         this.answerTarget.style.color = '#D25E65'
       }
-      
+
       // Editor target removed - errors shown in answer section only
 
       if (this.visualizationTarget) {
