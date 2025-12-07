@@ -5,76 +5,126 @@
       <h2 class="section-title"><%= t('dashboard.revenue_trends', default: 'Revenue Trends') %></h2>
       <p class="section-subtitle mt-1"><%= t('dashboard.performance_over_time', default: 'Performance over time') %></p>
     </div>
-    
-    <!-- Time Filters -->
-    <div class="flex bg-secondary rounded-xl p-1 border border-border" data-controller="filter">
-      <button data-action="click->filter#activate" data-range="1W" class="px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground rounded-lg transition-all duration-200" aria-label="1 Week">1W</button>
-      <button data-action="click->filter#activate" data-range="1M" class="px-4 py-2 text-xs font-semibold bg-primary/20 text-primary rounded-lg" aria-label="1 Month">1M</button>
-      <button data-action="click->filter#activate" data-range="6M" class="px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground rounded-lg transition-all duration-200" aria-label="6 Months">6M</button>
-      <button data-action="click->filter#activate" data-range="1Y" class="px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground rounded-lg transition-all duration-200" aria-label="1 Year">1Y</button>
-    </div>
   </div>
   
-  <div class="relative">
+  <div class="relative" style="min-height: 350px;">
     <% if @stats[:revenue_by_date].present? && @stats[:revenue_by_date].any? %>
-      <%= line_chart @stats[:revenue_by_date], 
-          height: "350px",
-          colors: ["#22c55e"],
-          library: { 
-            backgroundColor: 'transparent',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { 
-              legend: { display: false },
-              tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: '#fff',
-                bodyColor: '#fff',
-                borderColor: 'rgba(34, 197, 94, 0.5)',
-                borderWidth: 1,
-                cornerRadius: 8,
-                padding: 12
+      <div id="revenue-chart" style="height: 350px; width: 100%; position: relative; display: block; visibility: visible; opacity: 1;"></div>
+      <script>
+        (function() {
+          function renderChart() {
+            if (typeof Chartkick !== 'undefined' && typeof Chart !== 'undefined') {
+              var data = <%= @stats[:revenue_by_date].to_json.html_safe %>;
+              console.log('Rendering chart with data:', Object.keys(data).length, 'points');
+              var chart = new Chartkick.LineChart('revenue-chart', data, {
+                height: "350px",
+                colors: ["#22c55e"],
+                library: { 
+                  backgroundColor: 'transparent',
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                      titleColor: '#fff',
+                      bodyColor: '#fff',
+                      borderColor: 'rgba(34, 197, 94, 0.5)',
+                      borderWidth: 1,
+                      cornerRadius: 8,
+                      padding: 12
+                    }
+                  },
+                  scales: {
+                    x: { 
+                      grid: { display: false, drawBorder: false }, 
+                      ticks: { 
+                        color: 'rgba(255, 255, 255, 0.4)', 
+                        font: { family: 'Inter', size: 11, weight: 500 } 
+                      },
+                      border: { display: false }
+                    },
+                    y: { 
+                      grid: { 
+                        color: 'rgba(255, 255, 255, 0.05)', 
+                        drawBorder: false 
+                      }, 
+                      ticks: { 
+                        color: 'rgba(255, 255, 255, 0.4)', 
+                        font: { family: 'Inter', size: 11, weight: 500 }
+                      },
+                      border: { display: false }
+                    }
+                  },
+                  elements: {
+                    line: { 
+                      tension: 0.4, 
+                      borderWidth: 3, 
+                      borderColor: '#22c55e', 
+                      fill: true, 
+                      backgroundColor: 'rgba(34, 197, 94, 0.1)' 
+                    },
+                    point: { 
+                      radius: 0, 
+                      hoverRadius: 8, 
+                      hoverBackgroundColor: '#22c55e', 
+                      hoverBorderColor: 'rgba(0, 0, 0, 0.8)', 
+                      hoverBorderWidth: 3 
+                    }
+                  }
+                }
+              });
+              console.log('✅ Chart rendered manually', chart);
+              
+              // Verify chart was created and make it visible
+              var chartElement = document.getElementById('revenue-chart');
+              if (chartElement && chartElement.querySelector('canvas')) {
+                var canvas = chartElement.querySelector('canvas');
+                console.log('✅ Chart canvas created successfully');
+                console.log('Canvas size:', canvas.width, 'x', canvas.height);
+                
+                // Force visibility
+                chartElement.style.display = 'block';
+                chartElement.style.visibility = 'visible';
+                chartElement.style.opacity = '1';
+                canvas.style.display = 'block';
+                canvas.style.visibility = 'visible';
+              } else {
+                console.warn('⚠️ Chart canvas not found after rendering');
               }
-            },
-            scales: {
-              x: { 
-                grid: { display: false, drawBorder: false }, 
-                ticks: { 
-                  color: 'rgba(255, 255, 255, 0.4)', 
-                  font: { family: 'Inter', size: 11, weight: 500 } 
-                },
-                border: { display: false }
-              },
-              y: { 
-                grid: { 
-                  color: 'rgba(255, 255, 255, 0.05)', 
-                  drawBorder: false 
-                }, 
-                ticks: { 
-                  color: 'rgba(255, 255, 255, 0.4)', 
-                  font: { family: 'Inter', size: 11, weight: 500 },
-                  callback: "function(value) { return '$' + value.toLocaleString(); }"
-                },
-                border: { display: false }
-              }
-            },
-            elements: {
-              line: { 
-                tension: 0.4, 
-                borderWidth: 3, 
-                borderColor: '#22c55e', 
-                fill: true, 
-                backgroundColor: 'rgba(34, 197, 94, 0.1)' 
-              },
-              point: { 
-                radius: 0, 
-                hoverRadius: 8, 
-                hoverBackgroundColor: '#22c55e', 
-                hoverBorderColor: 'rgba(0, 0, 0, 0.8)', 
-                hoverBorderWidth: 3 
-              }
+            } else {
+              console.log('Waiting for Chartkick... Chart:', typeof Chart, 'Chartkick:', typeof Chartkick);
+              setTimeout(renderChart, 100);
             }
-          } %>
+          }
+          
+          // Try multiple times to ensure Chartkick is loaded
+          var attempts = 0;
+          var maxAttempts = 30;
+          function tryRender() {
+            attempts++;
+            var container = document.getElementById('revenue-chart');
+            if (container && typeof Chartkick !== 'undefined' && typeof Chart !== 'undefined') {
+              renderChart();
+            } else if (attempts < maxAttempts) {
+              setTimeout(tryRender, 100);
+            } else {
+              console.error('❌ Failed to render chart after', maxAttempts, 'attempts');
+            }
+          }
+          
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', tryRender);
+          } else {
+            tryRender();
+          }
+          
+          // Also try on Turbo load
+          document.addEventListener('turbo:load', function() {
+            setTimeout(tryRender, 200);
+          });
+        })();
+      </script>
     <% else %>
       <div class="flex flex-col items-center justify-center h-[350px] text-center">
         <div class="w-20 h-20 bg-secondary rounded-2xl flex items-center justify-center mb-4 border border-border">

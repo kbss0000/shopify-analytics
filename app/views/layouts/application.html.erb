@@ -28,9 +28,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Critical: Load Chart.js globally for Chartkick -->
+    <!-- Chartkick: Load Chart.js and Chartkick in head -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <%= javascript_include_tag "chartkick" %>
 
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -97,5 +98,58 @@
         </div>
       </main>
     <% end %>
+    
+    <!-- Initialize Chartkick at end of body -->
+    <script>
+      (function() {
+        var attempts = 0;
+        var maxAttempts = 50;
+        
+        function initChartkick() {
+          attempts++;
+          
+          if (typeof Chart !== 'undefined' && typeof Chartkick !== 'undefined') {
+            try {
+              Chartkick.use(Chart);
+              console.log('✅ Chartkick initialized with Chart.js');
+              
+              // Debug: Check for chart containers
+              setTimeout(function() {
+                var charts = document.querySelectorAll('[data-chart]');
+                console.log('Found ' + charts.length + ' chart containers');
+                
+                charts.forEach(function(chart, index) {
+                  console.log('Chart ' + index + ':', {
+                    id: chart.id,
+                    hasData: !!chart.getAttribute('data-chart'),
+                    chartType: chart.getAttribute('data-chart-type')
+                  });
+                });
+                
+                // Force render if needed
+                if (charts.length > 0 && typeof Chartkick !== 'undefined') {
+                  console.log('Chartkick adapter:', Chartkick.adapter);
+                }
+              }, 500);
+              
+            } catch (e) {
+              console.error('Chartkick init error:', e);
+            }
+          } else {
+            if (attempts < maxAttempts) {
+              setTimeout(initChartkick, 100);
+            } else {
+              console.error('❌ Failed to initialize Chartkick. Chart:', typeof Chart, 'Chartkick:', typeof Chartkick);
+            }
+          }
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initChartkick);
+        } else {
+          initChartkick();
+        }
+      })();
+    </script>
   </body>
 </html>

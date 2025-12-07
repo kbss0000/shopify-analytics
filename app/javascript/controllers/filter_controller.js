@@ -4,8 +4,8 @@ export default class extends Controller {
   static classes = ["active", "inactive"]
 
   connect() {
-    this.activeClass = ["bg-primary/20", "text-primary"]
-    this.inactiveClass = ["text-muted-foreground", "hover:text-foreground"]
+    this.activeClass = ["bg-primary/40", "text-primary", "shadow-sm"]
+    this.inactiveClass = ["bg-transparent", "text-muted-foreground", "hover:text-foreground"]
 
     // Set initial active state based on URL params
     const urlParams = new URLSearchParams(window.location.search)
@@ -47,12 +47,8 @@ export default class extends Controller {
     params.set('start_date', startDate.toISOString().split('T')[0])
     params.set('end_date', today.toISOString().split('T')[0])
 
-    // Turbo visit if available for smoother experience, else full reload
-    if (window.Turbo) {
-      window.Turbo.visit(`${window.location.pathname}?${params.toString()}`)
-    } else {
-      window.location.href = `${window.location.pathname}?${params.toString()}`
-    }
+    // Force full page reload to ensure data refreshes
+    window.location.href = `${window.location.pathname}?${params.toString()}`
   }
 
   setActiveButton(rangeLabel) {
